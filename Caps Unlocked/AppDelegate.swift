@@ -13,10 +13,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     let popover = NSPopover()
     
+    
+    func isCapslockEnabled(with event: NSEvent) -> Bool {
+        event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock)
+    }
+    
+    func flagsChanged(with event: NSEvent) {
+        print("Capslock is Enabled:", isCapslockEnabled(with: event))
+        if isCapslockEnabled(with: event) {
+            print("caps")
+        }
+    }
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         print("Caps Unlocked launched")
         setupMenubar()
         setupPopover()
+        
+        NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged, handler: flagsChanged)
+
     }
 }
 
